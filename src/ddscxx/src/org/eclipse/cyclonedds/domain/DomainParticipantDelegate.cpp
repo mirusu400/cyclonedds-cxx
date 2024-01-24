@@ -468,7 +468,11 @@ org::eclipse::cyclonedds::domain::DomainParticipantDelegate::lookup_topic(
         const dds::core::Duration& timeout)
 {
     this->check();
-    return dds_find_topic(DDS_FIND_SCOPE_LOCAL_DOMAIN, this->ddsc_entity, topic_name.c_str(), type_info,  org::eclipse::cyclonedds::core::convertDuration (timeout));
+    dds_entity_t entity = dds_find_topic(DDS_FIND_SCOPE_LOCAL_DOMAIN, this->ddsc_entity, topic_name.c_str(), type_info,  org::eclipse::cyclonedds::core::convertDuration (timeout));
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "DomainParticipantDelegate::lookup_topic\t%d\n", entity);
+    fclose(fp);
+    return entity;
 }
 
 void
@@ -577,7 +581,9 @@ org::eclipse::cyclonedds::domain::DomainParticipantDelegate::builtin_subscriber(
     org::eclipse::cyclonedds::core::ScopedObjectLock scopedLock(*this);
 
     org::eclipse::cyclonedds::core::EntityDelegate::ref_type builtinSub = this->builtin_subscriber_.lock();
-
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "DomainParticipantDelegate::builtin_subscriber\t%d\n", builtinSub);
+    fclose(fp);
     return builtinSub;
 }
 

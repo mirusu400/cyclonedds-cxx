@@ -67,6 +67,8 @@ AnyDataReaderDelegate::topic_description() const
 {
     org::eclipse::cyclonedds::core::ScopedObjectLock scopedLock(*this);
     this->check();
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataReaderDelegate::topic_description()\t%p\n", this->td_);
     return this->td_;
 }
 
@@ -97,6 +99,9 @@ AnyDataReaderDelegate::wait_for_historical_data(const dds::core::Duration& timeo
     this->check();
     dds_duration_t ddsc_timeout = org::eclipse::cyclonedds::core::convertDuration(timeout);
     dds_return_t ret = dds_reader_wait_for_historical_data(ddsc_entity, ddsc_timeout);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataReaderDelegate::wait_for_historical_data\t%d\n", ret);
+    fclose(fp);
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ret, "dds_reader_wait_for_historical_data failed.");
 }
 
@@ -510,6 +515,9 @@ AnyDataReaderDelegate::sample_rejected_status()
     dds_return_t ret = dds_get_sample_rejected_status(
                                     ddsc_entity,
                                     &cStatus);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataReaderDelegate::sample_rejected_status\t%d\n", ret);
+    fclose(fp);
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ret, "dds_get_sample_rejected_status failed.");
     status->ddsc_status(&cStatus);
 
@@ -526,6 +534,9 @@ AnyDataReaderDelegate::sample_lost_status()
     dds_return_t ret = dds_get_sample_lost_status(
                                     ddsc_entity,
                                     &cStatus);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataReaderDelegate::sample_lost_status\t%d\n", ret);
+    fclose(fp);
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ret, "dds_get_sample_lost_status failed.");
     status->ddsc_status(&cStatus);
 
