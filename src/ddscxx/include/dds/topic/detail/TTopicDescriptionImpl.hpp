@@ -30,18 +30,27 @@ namespace topic
 template <typename DELEGATE>
 const std::string& TTopicDescription<DELEGATE>::name() const
 {
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "TTopicDescription<DELEGATE>::name()\t%d\n", this->delegate()->name());
+    fclose(fp);
     return this->delegate()->name();
 }
 
 template <typename DELEGATE>
 const std::string& TTopicDescription<DELEGATE>::type_name() const
 {
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "TTopicDescription<DELEGATE>::type_name()\t%d\n", this->delegate()->type_name());
+    fclose(fp);
     return this->delegate()->type_name();
 }
 
 template <typename DELEGATE>
 const dds::domain::DomainParticipant& TTopicDescription<DELEGATE>::domain_participant() const
 {
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "TTopicDescription<DELEGATE>::domain_participant()\t%d\n", this->delegate()->domain_participant());
+    fclose(fp);
     return this->delegate()->domain_participant();
 }
 

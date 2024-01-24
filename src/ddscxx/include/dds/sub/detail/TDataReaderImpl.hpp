@@ -94,13 +94,20 @@ template <typename T, template <typename Q> class DELEGATE>
 dds::sub::LoanedSamples<T>
 DataReader<T, DELEGATE>::Selector::read()
 {
-    return impl_.read();
+    dds::sub::LoanedSamples<T> ret = impl_.read();
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "DataReader<T, DELEGATE>::Selector::read\t%d\n", ret);
+    return ret;
 }
 
 template <typename T, template <typename Q> class DELEGATE>
 dds::sub::LoanedSamples<T>
 DataReader<T, DELEGATE>::Selector::take()
 {
+    dds::sub::LoanedSamples<T> ret = impl_.take();
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "DataReader<T, DELEGATE>::Selector::take\t%d\n", ret);
+    return ret;
     return impl_.take();
 }
 
@@ -109,7 +116,11 @@ template <typename SamplesFWIterator>
 uint32_t
 DataReader<T, DELEGATE>::Selector::read(SamplesFWIterator sfit, uint32_t max_samples)
 {
-    return impl_.read(sfit, max_samples);
+    uint32_t ret = impl_.read(sfit, max_samples);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "DataReader<T, DELEGATE>::Selector::read\t%d\n", ret);
+    fclose(fp);
+    return ret;
 }
 
 template <typename T, template <typename Q> class DELEGATE>
@@ -117,7 +128,11 @@ template <typename SamplesFWIterator>
 uint32_t
 DataReader<T, DELEGATE>::Selector::take(SamplesFWIterator sfit,    uint32_t max_samples)
 {
-    return impl_.take(sfit, max_samples);
+    uint32_t ret = impl_.take(sfit, max_samples);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "DataReader<T, DELEGATE>::Selector::take\t%d\n", ret);
+    fclose(fp);
+    return ret;
 }
 
 template <typename T, template <typename Q> class DELEGATE>
@@ -125,7 +140,11 @@ template <typename SamplesBIIterator>
 uint32_t
 DataReader<T, DELEGATE>::Selector::read(SamplesBIIterator sbit)
 {
-    return impl_.read(sbit);
+    uint32_t ret = impl_.read(sbit);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "DataReader<T, DELEGATE>::Selector::read\t%d\n", ret);
+    fclose(fp);
+    return ret;
 }
 
 template <typename T, template <typename Q> class DELEGATE>
@@ -133,7 +152,11 @@ template <typename SamplesBIIterator>
 uint32_t
 DataReader<T, DELEGATE>::Selector::take(SamplesBIIterator sbit)
 {
-    return impl_.take(sbit);
+    uint32_t ret = impl_.take(sbit);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "DataReader<T, DELEGATE>::Selector::take\t%d\n", ret);
+    fclose(fp);
+    return ret;
 }
 
 //--------------------------------------------------------------------------------
@@ -1237,6 +1260,10 @@ dds::sub::detail::DataReader<T>::take(SamplesBIIterator samples, const Selector&
          * Use the resulting condition entity to read. */
         break;
     }
+    uint32_t length = holder.get_length();
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "DataReader<T>::take\t%d\n", length);
+    fclose(fp);
 
     return holder.get_length();
 }

@@ -69,6 +69,9 @@ void org::eclipse::cyclonedds::core::EntityDelegate::enable()
   dds_return_t ret;
   enabled_ = true;
   ret = dds_set_listener (this->ddsc_entity, this->listener_callbacks);
+  FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+  fprintf(fp, "EntityDelegate::enable\t%d\n", ret);
+  fclose(fp);
   ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ret, "Could not set internal listener.");
 }
 
@@ -81,9 +84,12 @@ org::eclipse::cyclonedds::core::EntityDelegate::status_changes() const
 
     check();
     ret = dds_get_status_changes(ddsc_entity, &ddsc_mask);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "EntityDelegate::status_changes\t%d\n", ret);
+    fclose(fp);
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ret, "Could not set internal listener.");
     mask = convertStatusMask(ddsc_mask);
-
+    
     return mask;
 }
 
@@ -97,6 +103,9 @@ org::eclipse::cyclonedds::core::EntityDelegate::instance_handle() const
     this->check();
 
     ret = dds_get_instance_handle(this->ddsc_entity, &ddsc_handle);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "EntityDelegate::instance_handle\t%d\n", ret);
+    fclose(fp);
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ret, "Failed get instance handle");
     handle = dds::core::InstanceHandle(ddsc_handle);
 
@@ -125,7 +134,9 @@ org::eclipse::cyclonedds::core::EntityDelegate::get_statusCondition()
         this->myStatusCondition = mySC.delegate()->get_weak_ref();
         mySCObj = mySC.delegate()->get_strong_ref();
     }
-
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "EntityDelegate::get_statusCondition\t%p\n", mySCObj); 
+    fclose(fp);
     return mySCObj;
 }
 

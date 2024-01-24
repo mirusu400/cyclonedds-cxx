@@ -120,6 +120,9 @@ public:
 
     const dds::core::StringSeq expression_parameters() const
     {
+        FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+        fprintf(fp, "MultiTopic::expression_parameters\t%s\n", dds::core::StringSeq(myFilter.begin(), myFilter.end()));
+        fclose(fp);
         return dds::core::StringSeq(myFilter.begin(), myFilter.end());
     }
 

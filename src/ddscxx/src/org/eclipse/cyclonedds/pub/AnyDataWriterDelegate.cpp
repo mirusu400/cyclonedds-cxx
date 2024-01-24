@@ -202,6 +202,9 @@ AnyDataWriterDelegate::write(
     } else {
         ret = dds_write(writer, data);
     }
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataWriterDelegate::write\t%d\n", ret);
+    fclose(fp);
 
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ret, "write failed.");
 }
@@ -241,9 +244,11 @@ AnyDataWriterDelegate::register_instance(
 
     dds_instance_handle_t ih;
     dds_return_t ret = dds_register_instance(writer, &ih, data);
-
+    
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ret, "dds_instance_register failed.");
-
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataWriterDelegate::register_instance\t%d\n", ih);
+    fclose(fp);
     return ih;
 }
 
@@ -257,6 +262,9 @@ AnyDataWriterDelegate::unregister_instance(
     dds_return_t ret;
 
     if (handle == dds::core::null) {
+        FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+        fprintf(fp, "AnyDataWriterDelegate::unregister_instance\t%d\n", handle);
+        fclose(fp);
       ISOCPP_THROW_EXCEPTION(ISOCPP_PRECONDITION_NOT_MET_ERROR,
                             "handle is null");
     }
@@ -268,6 +276,9 @@ AnyDataWriterDelegate::unregister_instance(
     } else {
         ret = dds_unregister_instance_ih(writer, ih);
     }
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataWriterDelegate::unregister_instance\t%d\n", ret);
+    fclose(fp);
 
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ret, "unregister_instance failed.");
 }
@@ -305,6 +316,9 @@ AnyDataWriterDelegate::dispose_instance(
     dds_return_t ret;
 
     if (handle == dds::core::null) {
+        FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+        fprintf(fp, "AnyDataWriterDelegate::dispose_instance\t%d\n", handle);
+        fclose(fp);
       ISOCPP_THROW_EXCEPTION(ISOCPP_PRECONDITION_NOT_MET_ERROR,
                             "handle is null");
     }
@@ -316,7 +330,9 @@ AnyDataWriterDelegate::dispose_instance(
     } else {
         ret = dds_dispose_ih(writer, ih);
     }
-
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataWriterDelegate::dispose_instance\t%d\n", ret);
+    fclose(fp);
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ret, "dispose_instance failed.");
 }
 
@@ -329,6 +345,9 @@ AnyDataWriterDelegate::dispose_instance(
     dds_return_t ret;
 
     if (data == NULL)   {
+        FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+        fprintf(fp, "AnyDataWriterDelegate::dispose_instance\t%d\n", data);
+        fclose(fp);
         ISOCPP_THROW_EXCEPTION(ISOCPP_PRECONDITION_NOT_MET_ERROR,
                                "data is null");
     }
@@ -339,6 +358,9 @@ AnyDataWriterDelegate::dispose_instance(
     } else {
         ret = dds_dispose(writer, data);
     }
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataWriterDelegate::dispose_instance\t%d\n", ret);
+    fclose(fp);
 
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ret, "dispose failed.");
 }
@@ -350,6 +372,9 @@ AnyDataWriterDelegate::get_key_value(
     const dds::core::InstanceHandle& handle)
 {
     dds_return_t ret = dds_instance_get_key(writer, handle.delegate().handle(), data);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataWriterDelegate::get_key_value\t%d\n", ret);
+    fclose(fp);
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ret, "dds_instance_get_key failed.");
 }
 
@@ -358,7 +383,11 @@ AnyDataWriterDelegate::lookup_instance(
     dds_entity_t writer,
     const void *data)
 {
-    return dds_lookup_instance(writer, data);
+    dds_instance_handle_t handle = dds_lookup_instance(writer, data);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataWriterDelegate::lookup_instance\t%d\n", handle);
+    fclose(fp);
+    return handle;
 }
 
 const ::dds::core::status::LivelinessLostStatus
@@ -368,6 +397,9 @@ AnyDataWriterDelegate::liveliness_lost_status()
     ::dds::core::status::LivelinessLostStatus result;
     dds_liveliness_lost_status_t ddsc_status;
     int ddsc_ret = dds_get_liveliness_lost_status (ddsc_entity, &ddsc_status);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataWriterDelegate::liveliness_lost_status\t%d\n", ddsc_ret);
+    fclose(fp);
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ddsc_ret, "dds_get_liveliness_lost_status failed.");
 
     result.delegate().ddsc_status (&ddsc_status);
@@ -380,6 +412,9 @@ AnyDataWriterDelegate::offered_deadline_missed_status()
     dds::core::status::OfferedDeadlineMissedStatus status;
     dds_offered_deadline_missed_status_t ddsc_status;
     int ddsc_ret = dds_get_offered_deadline_missed_status (ddsc_entity, &ddsc_status);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataWriterDelegate::offered_deadline_missed_status\t%d\n", ddsc_ret);
+    fclose(fp);
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ddsc_ret, "dds_get_offered_deadline_missed_status failed.");
 
     status.delegate().ddsc_status (&ddsc_status);
@@ -393,6 +428,9 @@ AnyDataWriterDelegate::offered_incompatible_qos_status()
     dds::core::status::OfferedIncompatibleQosStatus status;
     dds_offered_incompatible_qos_status_t ddsc_status;
     int ddsc_ret = dds_get_offered_incompatible_qos_status (ddsc_entity, &ddsc_status);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataWriterDelegate::offered_incompatible_qos_status\t%d\n", ddsc_ret);
+    fclose(fp);
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ddsc_ret, "dds_get_offered_incompatible_qos_status failed.");
 
     status.delegate().ddsc_status (&ddsc_status);
@@ -405,6 +443,9 @@ AnyDataWriterDelegate::publication_matched_status()
     dds::core::status::PublicationMatchedStatus status;
     dds_publication_matched_status_t ddsc_status;
     int ddsc_ret = dds_get_publication_matched_status (ddsc_entity, &ddsc_status);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataWriterDelegate::publication_matched_status\t%d\n", ddsc_ret);
+    fclose(fp);
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ddsc_ret, "dds_get_publication_matched_status failed.");
 
     status.delegate().ddsc_status (&ddsc_status);

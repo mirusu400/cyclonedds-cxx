@@ -138,6 +138,9 @@ PublisherDelegate::default_datawriter_qos() const
 {
     org::eclipse::cyclonedds::core::ScopedObjectLock scopedLock(*this);
     dds::pub::qos::DataWriterQos qos = this->default_dwqos_;
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "PublisherDelegate::default_datawriter_qos\t%p\n", &qos);
+    fclose(fp);
     return qos;
 }
 
@@ -202,6 +205,9 @@ const dds::domain::DomainParticipant&
 PublisherDelegate::participant() const
 {
     this->check();
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "PublisherDelegate::participant\t%p\n", &dp_);
+    fclose(fp);
     return dp_;
 }
 
@@ -245,7 +251,9 @@ PublisherDelegate::find_datawriter(const std::string& topic_name)
             }
         }
     }
-
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "PublisherDelegate::find_datawriter\t%p\n", writer);
+    fclose(fp);
     return writer;
 }
 

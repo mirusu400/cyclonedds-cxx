@@ -193,6 +193,9 @@ org::eclipse::cyclonedds::domain::DomainParticipantDelegate::domain_id()
 {
     org::eclipse::cyclonedds::core::ScopedObjectLock scopedLock(*this);
     this->check();
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "DomainParticipantDelegate::domain_id\t%d\n", this->domain_id_);
+    fclose(fp);
     return this->domain_id_;
 }
 
@@ -221,7 +224,9 @@ org::eclipse::cyclonedds::domain::DomainParticipantDelegate::contains_entity(
     if (!contains) {
         contains = this->topics.contains(handle);
     }
-
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "DomainParticipantDelegate::contains_entity\t%d\n", contains);
+    fclose(fp);
     return contains;
 }
 
@@ -231,7 +236,11 @@ org::eclipse::cyclonedds::domain::DomainParticipantDelegate::current_time() cons
 {
     org::eclipse::cyclonedds::core::ScopedObjectLock scopedLock(*this);
     this->check();
-    return org::eclipse::cyclonedds::core::convertTime(dds_time());
+    dds::core::Time time = org::eclipse::cyclonedds::core::convertTime(dds_time());
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "DomainParticipantDelegate::current_time\t%d\n", time);
+    fclose(fp);
+    return time;
 }
 
 const dds::domain::qos::DomainParticipantQos&
@@ -300,6 +309,9 @@ org::eclipse::cyclonedds::domain::DomainParticipantDelegate::default_topic_qos()
 {
     org::eclipse::cyclonedds::core::ScopedObjectLock scopedLock(*this);
     this->check();
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "DomainParticipantDelegate::default_topic_qos\t%d\n", this->default_topic_qos_);
+    fclose(fp);
     return this->default_topic_qos_;
 }
 
@@ -318,6 +330,9 @@ org::eclipse::cyclonedds::domain::DomainParticipantDelegate::default_publisher_q
 {
     org::eclipse::cyclonedds::core::ScopedObjectLock scopedLock(*this);
     this->check();
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "DomainParticipantDelegate::default_publisher_qos\t%d\n", this->default_pub_qos_);
+    fclose(fp);
     return this->default_pub_qos_;
 }
 
@@ -336,6 +351,9 @@ org::eclipse::cyclonedds::domain::DomainParticipantDelegate::default_subscriber_
 {
     org::eclipse::cyclonedds::core::ScopedObjectLock scopedLock(*this);
     this->check();
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "DomainParticipantDelegate::default_subscriber_qos\t%d\n", this->default_sub_qos_);
+    fclose(fp);
     return this->default_sub_qos_;
 }
 
@@ -355,7 +373,9 @@ org::eclipse::cyclonedds::domain::DomainParticipantDelegate::default_participant
     global_participants_lock_.lock();
     dds::domain::qos::DomainParticipantQos qos = default_participant_qos_;
     global_participants_lock_.unlock();
-
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "DomainParticipantDelegate::default_participant_qos\t%d\n", qos);
+    fclose(fp);
     return qos;
 }
 

@@ -124,7 +124,9 @@ AnyTopicDelegate::inconsistent_topic_status() const
 
     dds_inconsistent_topic_status_t ddsc_stat;
     dds_return_t ddsc_ret = dds_get_inconsistent_topic_status(ddsc_entity, &ddsc_stat);
-
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyTopicDelegate::inconsistent_topic_status\t%d\n", ddsc_ret);
+    fclose(fp);
     ::dds::core::status::InconsistentTopicStatus status;
     status->ddsc_status(&ddsc_stat);
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ddsc_ret, "dds_get_inconsistent_topic_status failed.");

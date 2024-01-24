@@ -226,6 +226,9 @@ SubscriberDelegate::find_datareaders(const std::string& topic_name)
             }
         }
     }
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "SubscriberDelegate::find_datareaders\t%p\n", &_readers);
+    fclose(fp);
 
     return _readers;
 }
@@ -238,6 +241,10 @@ SubscriberDelegate::get_datareaders(
     ISOCPP_THROW_EXCEPTION(ISOCPP_UNSUPPORTED_ERROR, "Function not currently supported");
     org::eclipse::cyclonedds::core::ScopedObjectLock scopedLock(*this);
     std::vector<org::eclipse::cyclonedds::sub::AnyDataReaderDelegate::ref_type> _readers;
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "SubscriberDelegate::get_datareaders\t%p\n", &readers);
+    fclose(fp);
+
     return _readers;
 }
 
@@ -374,6 +381,7 @@ void SubscriberDelegate::on_sample_lost(dds_entity_t reader,
 
     this->listener()->on_sample_lost(adr, s);
 }
+
 
 
 

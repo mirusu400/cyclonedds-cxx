@@ -77,7 +77,9 @@ org::eclipse::cyclonedds::core::cond::WaitSetDelegate::wait(
     memset (attach, 0, sizeof(dds_attach_t) * sz);
 
     dds_return_t n_triggered = dds_waitset_wait(this->get_ddsc_entity(), attach, sz, c_timeout);
-
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "WaitSetDelegate::wait\t%d\n", n_triggered);
+    fclose(fp);
     if (n_triggered == 0) {
         delete[] attach;
         ISOCPP_THROW_EXCEPTION(ISOCPP_TIMEOUT_ERROR, "dds::core::cond::WaitSet::wait() timed out.");
@@ -134,7 +136,11 @@ org::eclipse::cyclonedds::core::cond::WaitSetDelegate::detach_condition(
         org::eclipse::cyclonedds::core::cond::ConditionDelegate * cond)
 {
     org::eclipse::cyclonedds::core::ScopedObjectLock scopedLock(*this);
-    return cond->remove_waitset(this);
+    bool ret = cond -> remove_waitset(this);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "WaitSetDelegate::detach_condition\t%d\n", ret);
+    fclose(fp);
+    return ret;
 }
 
 // this will be called when holding the lock
