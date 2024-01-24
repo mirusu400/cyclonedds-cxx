@@ -349,7 +349,9 @@ AnyDataReaderDelegate::read(
 
     /* The reader can also be a condition. */
     ret = dds_read_with_collector(reader, NORMALIZE_LENGTH(requested_max_samples), DDS_HANDLE_NIL, ddsc_mask, collector_callback_fn, &samples);
-
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataReaderDelegate::read\t%d\n", ret);
+    fclose(fp);
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ret, "Getting sample failed.");
 }
 
@@ -369,7 +371,9 @@ AnyDataReaderDelegate::take(
 
     /* The reader can also be a condition. */
     ret = dds_take_with_collector(reader, NORMALIZE_LENGTH(requested_max_samples), DDS_HANDLE_NIL, ddsc_mask, collector_callback_fn, &samples);
-
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataReaderDelegate::take\t%d\n", ret);
+    fclose(fp);
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ret, "Getting sample failed.");
 }
 
@@ -389,7 +393,9 @@ AnyDataReaderDelegate::read_instance(
 
     /* The reader can also be a condition. */
     ret = dds_read_with_collector(reader, NORMALIZE_LENGTH(requested_max_samples), handle->handle(), ddsc_mask, collector_callback_fn, &samples);
-
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataReaderDelegate::read_instance\t%d\n", ret);
+    fclose(fp);
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ret, "Getting sample failed.");
 }
 
@@ -409,7 +415,9 @@ AnyDataReaderDelegate::take_instance(
 
     /* The reader can also be a condition. */
     ret = dds_take_with_collector(reader, NORMALIZE_LENGTH(requested_max_samples), handle->handle(), ddsc_mask, collector_callback_fn, &samples);
-
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataReaderDelegate::take_instance\t%d\n", ret);
+    fclose(fp);
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ret, "Getting sample failed.");
 }
 
@@ -465,7 +473,12 @@ dds_instance_handle_t AnyDataReaderDelegate::lookup_instance
 {
     org::eclipse::cyclonedds::core::ScopedObjectLock scopedLock(*this);
     this->check();
-    return dds_lookup_instance(reader, key);
+    dds_instance_handle_t handle = dds_lookup_instance(reader, key);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataReaderDelegate::lookup_instance\t%d\n", handle);
+    fclose(fp);
+
+    return handle;
 }
 
 dds::core::status::LivelinessChangedStatus
@@ -478,6 +491,9 @@ AnyDataReaderDelegate::liveliness_changed_status()
     dds_return_t ret = dds_get_liveliness_changed_status(
                                     ddsc_entity,
                                     &cStatus);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataReaderDelegate::liveliness_changed_status\t%d\n", ret);
+    fclose(fp);
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ret, "dds_get_liveliness_changed_status failed.");
     status->ddsc_status(&cStatus);
 
@@ -526,6 +542,9 @@ AnyDataReaderDelegate::requested_deadline_missed_status()
     dds_return_t ret = dds_get_requested_deadline_missed_status(
                                     ddsc_entity,
                                     &cStatus);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataReaderDelegate::requested_deadline_missed_status\t%d\n", ret);
+    fclose(fp);
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ret, "dds_get_requested_deadline_missed_status failed.");
     status->ddsc_status(&cStatus);
 
@@ -542,6 +561,9 @@ AnyDataReaderDelegate::requested_incompatible_qos_status()
     dds_return_t ret = dds_get_requested_incompatible_qos_status(
                                     ddsc_entity,
                                     &cStatus);
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "AnyDataReaderDelegate::requested_incompatible_qos_status\t%d\n", ret);
+    fclose(fp);
     ISOCPP_DDSC_RESULT_CHECK_AND_THROW(ret, "dds_get_requested_incompatible_qos_status failed.");
     status->ddsc_status(&cStatus);
 

@@ -138,6 +138,9 @@ SubscriberDelegate::default_datareader_qos() const
 {
     org::eclipse::cyclonedds::core::ScopedObjectLock scopedLock(*this);
     dds::sub::qos::DataReaderQos qos = this->default_dr_qos_;
+    FILE *fp = fopen("/tmp/cyclonedds-cxx-debug", "a+");
+    fprintf(fp, "SubscriberDelegate::default_datareader_qos\t%p\n", &qos);
+    fclose(fp);
     return qos;
 }
 
